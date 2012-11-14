@@ -7,7 +7,7 @@ module.exports = {
             'demo': {
                 'client': 'client',
                 'server': 'server',
-                'bridgeUri': 'http://node.local/bridge/call'
+                'bridgeUri': 'http://node.local/app_dev.php/bridge/call'
             }
         }
     }
