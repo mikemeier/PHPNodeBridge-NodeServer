@@ -1,0 +1,18 @@
+{
+    
+    "name": "phpnodebridge",
+    
+    "version": "0.0.1",
+    
+    "engines": {
+        "node": "0.8.0"
+    },
+    
+    "dependencies":{
+        "request": "2.11.4",
+        "connect-hopeful-body-parser": "0.1.1",
+        "socket.io": "0.9.10",
+        "eventemitter2": "0.4.10"
+    }
+    
+}
