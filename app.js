@@ -17,14 +17,13 @@ var
     requestToBridge = require('./requestToBridge')(request, queryString),
     
     socketEvents = require('./socketEvents')(requestToBridge),
-    eventListeners = require('./eventListeners')(eventEmitter),
+    eventListeners = require('./eventListeners')(eventEmitter, config.socket.eventNamePrefix),
     
     server = require('http').createServer(requestHandler.getHandler()),
     io = require('socket.io').listen(server)
 ;
 
 requestHandler.setIo(io);
-eventListeners.register();
 
 io.set('authorization', function(handshakeData, cb){
     console.log(handshakeData);
@@ -48,8 +47,11 @@ io.set('authorization', function(handshakeData, cb){
 });
 
 for(apiName in config.api.tokens){
+    var apiConfig = config.api.tokens[apiName];
+    eventListeners.register(apiConfig.eventNamePrefix);
+
     io.of('/'+apiName).on('connection', function(socket){
-        socketEvents.register(socket);
+        socketEvents.register(socket, apiConfig.eventNamePrefix);
     });
 }
 
