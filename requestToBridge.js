@@ -11,24 +11,40 @@ RequestToBridge.prototype = {
             parameters: eventParameters
         }]);
 
-        this.send(socket.handshake.bridgeUri, body, cb);
+        var cbs = {};
+        cbs[eventName] = cb;
+
+        this.send(socket.handshake.bridgeUri, body, cbs);
     },
 
-    executeMultiple: function(socket, events, cb){
+    executeMultiple: function(socket, events, cbs){
         var body = this.getBody(socket, events);
 
-        this.send(socket.handshake.bridgeUri, body, cb);
+        this.send(socket.handshake.bridgeUri, body, cbs);
     },
 
-    send: function(uri, body, cb){
+    send: function(uri, body, cbs){
         this.request.post({
             headers: {'content-type' : 'application/x-www-form-urlencoded'},
             uri: uri,
             body: body
         }, function(err, response, body){
-            if(typeof(cb) == "function"){
-                cb(err, body);
+            try{
+                var json = JSON.parse(body);
+            }catch(e){
+                var json = null;
             }
+
+            if(!json || typeof json.events != "object"){
+                return;
+            }
+
+            for(eventName in json.events){
+                if(typeof cbs[eventName] == "function"){
+                    cbs[eventName](null, json.events[eventName]);
+                }
+            }
+
             return;
         });
     },

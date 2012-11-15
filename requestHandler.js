@@ -63,6 +63,7 @@ RequestHandler.prototype = {
                     return;
                 }
 
+                console.log(req.body.name);
                 console.log(req.body);
                 
                 var eventName = req.body.eventName;

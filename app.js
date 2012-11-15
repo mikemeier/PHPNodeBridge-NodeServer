@@ -26,7 +26,6 @@ var
 requestHandler.setIo(io);
 
 io.set('authorization', function(handshakeData, cb){
-    console.log(handshakeData);
     var query = handshakeData.query;
     
     if(!query.name || !query.token || !query.identification){

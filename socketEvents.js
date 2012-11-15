@@ -5,8 +5,6 @@ function SocketEvents(requestToBridge){
 SocketEvents.prototype = {
     
     register: function(socket, eventNamePrefix){
-        console.log('reqgister '+eventNamePrefix);
-
         var requestToBridge = this.requestToBridge;
 
         requestToBridge.execute(socket, eventNamePrefix+'.user.connection', {}, function(err, result){
