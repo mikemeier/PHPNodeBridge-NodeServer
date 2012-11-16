@@ -12,13 +12,19 @@ RequestToBridge.prototype = {
      * @param cb
      */
     execute: function(socket, eventName, eventParameters, cb){
+        if(typeof eventParameters != "object"){
+            eventParameters = {};
+        }
+
         var body = this.getBody(socket, [{
             name: eventName,
             parameters: eventParameters
         }]);
 
         var cbs = {};
-        cbs[eventName] = cb;
+        if(typeof cb == "function"){
+            cbs[eventName] = cb;
+        }
 
         this.send(socket.handshake.bridgeUri, body, cbs);
     },

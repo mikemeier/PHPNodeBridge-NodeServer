@@ -48,6 +48,12 @@ io.set('authorization', function(handshakeData, cb){
 eventListeners.register();
 
 for(var apiName in config.api.tokens){
+    var token = config.api.tokens[apiName];
+
+    // inform server for restarting nodejs
+    var socket = {id: 'nodejsserver', handshake: {identification: 'nodejsserver', bridgeUri: token.bridgeUri}};
+    requestToBridge.execute(socket, 'server.restart');
+
     io.of('/'+apiName).on('connection', function(socket){
         socketEvents.register(socket, requestToBridge);
     });
