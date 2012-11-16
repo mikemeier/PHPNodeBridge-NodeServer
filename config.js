@@ -8,8 +8,7 @@ module.exports = {
             demo: {
                 client: 'client',
                 server: 'server',
-                bridgeUri: 'http://node.local/app_dev.php/bridge/call',
-                eventNamePrefix: 'mikemeier_php_node_bridge'
+                bridgeUri: 'http://node.local/app_dev.php/bridge/call'
             }
         }
     }

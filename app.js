@@ -14,10 +14,10 @@ var
     bodyParser = require('connect-hopeful-body-parser'),
     
     requestHandler = require('./requestHandler')(eventEmitter, config.api.tokens, bodyParser),
-    requestToBridge = require('./requestToBridge')(request, queryString),
+    requestToBridge = require('./requestToBridge')(request, queryString);
     
     socketEvents = require('./socketEvents')(requestToBridge),
-    eventListeners = require('./eventListeners')(eventEmitter, config.socket.eventNamePrefix),
+    eventListeners = require('./eventListeners')(eventEmitter),
     
     server = require('http').createServer(requestHandler.getHandler()),
     io = require('socket.io').listen(server)
@@ -45,12 +45,11 @@ io.set('authorization', function(handshakeData, cb){
     cb(null, true);
 });
 
-for(apiName in config.api.tokens){
-    var apiConfig = config.api.tokens[apiName];
-    eventListeners.register(apiConfig.eventNamePrefix);
+eventListeners.register();
 
+for(var apiName in config.api.tokens){
     io.of('/'+apiName).on('connection', function(socket){
-        socketEvents.register(socket, apiConfig.eventNamePrefix);
+        socketEvents.register(socket, requestToBridge);
     });
 }
 

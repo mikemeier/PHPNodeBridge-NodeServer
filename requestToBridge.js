@@ -39,7 +39,7 @@ RequestToBridge.prototype = {
                 return;
             }
 
-            for(eventName in json.events){
+            for(var eventName in json.events){
                 if(typeof cbs[eventName] == "function"){
                     cbs[eventName](null, json.events[eventName]);
                 }
@@ -50,6 +50,7 @@ RequestToBridge.prototype = {
     },
 
     getBody: function(socket, events){
+        console.log(JSON.stringify(events));
         return this.queryString.stringify({
             socketId: socket.id,
             identification: socket.handshake.identification,

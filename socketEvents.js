@@ -4,14 +4,16 @@ function SocketEvents(requestToBridge){
 
 SocketEvents.prototype = {
     
-    register: function(socket, eventNamePrefix){
+    register: function(socket){
         var requestToBridge = this.requestToBridge;
 
-        requestToBridge.execute(socket, eventNamePrefix+'.user.connection', {}, function(err, result){
+        requestToBridge.execute(socket, 'user.connection', {}, function(err, result){
             console.log(result);
         });
 
-        socket.on(eventNamePrefix+'.user.message', function(){
+        socket.on('user.message', function(){
+            console.log('got message');
+
             var args = [];
             for(i in arguments){
                 args.push(arguments[i]);
@@ -26,11 +28,14 @@ SocketEvents.prototype = {
                 cb = null;
             }
 
-            requestToBridge.execute(socket, eventNamePrefix+'.user.message', args, cb);
+            console.log(args);
+            console.log(cb);
+
+            requestToBridge.execute(socket, 'user.message', args, cb);
         });
 
         socket.on('disconnect', function(){
-            requestToBridge.execute(socket, eventNamePrefix+'.user.disconnection', {}, function(err, result){
+            requestToBridge.execute(socket, 'user.disconnection', {}, function(err, result){
                 console.log(result);
             });
         });

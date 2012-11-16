@@ -4,14 +4,14 @@ function EventListeners(eventEmitter){
 
 EventListeners.prototype = {
     
-    register: function(eventNamePrefix){
+    register: function(){
         var eventEmitter = this.eventEmitter;
         
-        eventEmitter.on(eventNamePrefix+'.user.refresh', function(io, req, res, next){
+        eventEmitter.on('user.refresh', function(io, req, res, next){
             
         });
         
-        eventEmitter.on(eventNamePrefix+'.user.message', function(io, req, res, next){
+        eventEmitter.on('user.message', function(io, req, res, next){
             io.sockets.clients().every(function(socket){
                 console.log(socket.handshakeData);
             });
