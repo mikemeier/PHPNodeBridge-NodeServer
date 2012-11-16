@@ -5,6 +5,12 @@ function RequestToBridge(request, queryString){
 
 RequestToBridge.prototype = {
 
+    /**
+     * @param socket
+     * @param eventName
+     * @param eventParameters
+     * @param cb
+     */
     execute: function(socket, eventName, eventParameters, cb){
         var body = this.getBody(socket, [{
             name: eventName,
@@ -17,12 +23,22 @@ RequestToBridge.prototype = {
         this.send(socket.handshake.bridgeUri, body, cbs);
     },
 
+    /**
+     * @param socket
+     * @param events
+     * @param cbs
+     */
     executeMultiple: function(socket, events, cbs){
         var body = this.getBody(socket, events);
 
         this.send(socket.handshake.bridgeUri, body, cbs);
     },
 
+    /**
+     * @param uri
+     * @param body
+     * @param cbs
+     */
     send: function(uri, body, cbs){
         this.request.post({
             headers: {'content-type' : 'application/x-www-form-urlencoded'},
@@ -40,7 +56,7 @@ RequestToBridge.prototype = {
             }
 
             for(var eventName in json.events){
-                if(typeof cbs[eventName] == "function"){
+                if(cbs[eventName] && typeof cbs[eventName] == "function"){
                     cbs[eventName](null, json.events[eventName]);
                 }
             }
@@ -49,8 +65,12 @@ RequestToBridge.prototype = {
         });
     },
 
+    /**
+     * @param socket
+     * @param events
+     * @return string
+     */
     getBody: function(socket, events){
-        console.log(JSON.stringify(events));
         return this.queryString.stringify({
             socketId: socket.id,
             identification: socket.handshake.identification,

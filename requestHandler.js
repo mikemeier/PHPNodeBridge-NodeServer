@@ -43,6 +43,8 @@ RequestHandler.prototype = {
             var io = self.getIo();
             
             bodyParser()(req, res, function(){
+                console.log(req.body);
+
                 res.writeHead(200, [["Content-Type", "text/json"]]);
                 
                 if(!req.body){
@@ -62,9 +64,6 @@ RequestHandler.prototype = {
                     res.end();
                     return;
                 }
-
-                console.log(req.body.name);
-                console.log(req.body);
                 
                 var eventName = req.body.eventName;
                 if(!eventName){

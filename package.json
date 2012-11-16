@@ -2,7 +2,7 @@
     
     "name": "php-node-bridge-node-server",
     
-    "version": "0.0.1",
+    "version": "0.0.2",
     
     "engines": {
         "node": "0.8.0"
@@ -12,7 +12,8 @@
         "request": "2.11.4",
         "connect-hopeful-body-parser": "0.1.1",
         "socket.io": "0.9.10",
-        "eventemitter2": "0.4.10"
+        "eventemitter2": "0.4.10",
+        "nogg": "0.0.8b"
     }
     
 }
