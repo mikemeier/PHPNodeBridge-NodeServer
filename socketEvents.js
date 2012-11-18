@@ -4,7 +4,7 @@ function SocketEvents(requestToBridge){
 };
 
 SocketEvents.prototype = {
-    
+
     register: function(socket){
         var self = this;
         var requestToBridge = this.requestToBridge;

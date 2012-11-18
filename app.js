@@ -24,6 +24,7 @@ var
 ;
 
 requestHandler.setIo(io);
+requestToBridge.setIo(io);
 
 io.set('authorization', function(handshakeData, cb){
     var query = handshakeData.query;
@@ -41,6 +42,7 @@ io.set('authorization', function(handshakeData, cb){
     
     handshakeData.bridgeUri = token.bridgeUri;
     handshakeData.identification = query.identification;
+    handshakeData.apiName = query.name;
     
     cb(null, true);
 });
@@ -51,12 +53,13 @@ for(var apiName in config.api.tokens){
     var token = config.api.tokens[apiName];
 
     // inform bridges about restarting nodejs
-    var socket = {id: 'nodejsserver', handshake: {identification: 'nodejsserver', bridgeUri: token.bridgeUri}};
-    requestToBridge.execute(socket, 'server.restart');
-
-    io.of('/'+apiName).on('connection', function(socket){
-        socketEvents.register(socket, requestToBridge);
-    });
+    var socketDummy = {id: 'nodejsserver', handshake: {identification: 'nodejsserver', bridgeUri: token.bridgeUri}};
+    requestToBridge.execute(socketDummy, 'server.restart');
 }
+
+io.on('connection', function(socket){
+    socket.join(socket.handshake.apiName);
+    socketEvents.register(socket, requestToBridge);
+});
 
 server.listen(config.socket.port);

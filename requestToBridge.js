@@ -6,6 +6,10 @@ function RequestToBridge(request, queryString){
 
 RequestToBridge.prototype = {
 
+    setIo: function(io){
+        this.io = io;
+    },
+
     /**
      * @param socket
      * @param eventName
@@ -79,12 +83,31 @@ RequestToBridge.prototype = {
     /**
      * @param socket
      * @param events
-     * @return string
+     * @param isDisconnecting
+     * @return {*}
      */
-    getBody: function(socket, events){
+    getBody: function(socket, events, isDisconnecting){
+        if(typeof isDisconnecting == undefined){
+            isDisconnecting = false;
+        }
+
+        var users = {};
+        this.io.of('/'+socket.handshake.apiName).clients().forEach(function(roomSocket){
+            if(isDisconnecting == true && roomSocket.id == socket.id){
+                return;
+            }
+
+            var identification = roomSocket.handshake.identification;
+            if(!users[identification]){
+                users[identification] = [];
+            }
+            users[identification].push(roomSocket.id);
+        });
+
         return this.queryString.stringify({
             socketId: socket.id,
             identification: socket.handshake.identification,
+            users: JSON.stringify(users),
             events: JSON.stringify(events)
         });
     }
