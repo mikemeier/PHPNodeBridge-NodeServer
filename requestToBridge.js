@@ -1,6 +1,7 @@
 function RequestToBridge(request, queryString){
     this.request = request;
     this.queryString = queryString;
+    this.logger = require('nogg').logger('requestToBridge');
 };
 
 RequestToBridge.prototype = {
@@ -26,6 +27,8 @@ RequestToBridge.prototype = {
             cbs[eventName] = cb;
         }
 
+        this.logger.debug(eventName);
+
         this.send(socket.handshake.bridgeUri, body, cbs);
     },
 
@@ -46,11 +49,13 @@ RequestToBridge.prototype = {
      * @param cbs
      */
     send: function(uri, body, cbs){
+        var self = this;
         this.request.post({
             headers: {'content-type' : 'application/x-www-form-urlencoded'},
             uri: uri,
             body: body
         }, function(err, response, body){
+            self.logger.debug(body);
             try{
                 var json = JSON.parse(body);
             }catch(e){
