@@ -1,5 +1,18 @@
 {
-    "name": "mikemeier/php-node-bridge-node-server",
-    "description": "",
-    "keywords": ["bridge", "php", "node", "symfony"]
+
+    "name":         "mikemeier/php-node-bridge-node-server",
+    "description":  "The NodeJS Server for the PHPNodeBridge",
+    "keywords":     ["bridge", "php", "node", "symfony"],
+    "type":         "library",
+    "license":      "MIT",
+    "authors": [
+        {
+            "name":     "Mike Meier",
+            "email":    "sk.mykon@gmail.com"
+        }
+    ],
+
+    "minimum-stability": "dev",
+
+    "target-dir": "mikemeier/PHPNodeBridgeNodeServer"
 }
